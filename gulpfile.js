@@ -1,0 +1,33 @@
+'use strict'
+
+const gulp = require('gulp')
+const $ = require('gulp-load-plugins')()
+
+const srcIncludes = [
+  '**/*.js',
+  '!node_modules/**',
+  '!coverage/**'
+]
+
+gulp.task('lint', function lintTask () {
+  return gulp
+    .src(srcIncludes)
+    .pipe($.standard())
+    .pipe($.standard.reporter('default', { breakOnError: true }))
+})
+
+gulp.task('pre-test', function preTest () {
+  return gulp
+    .src(srcIncludes)
+    .pipe($.istanbul())
+    .pipe($.istanbul.hookRequire())
+})
+
+gulp.task('test', ['pre-test'], function testTask () {
+  return gulp
+    .src(['test/*.js'])
+    .pipe($.mocha({ ui: 'tdd', reporter: 'min' }))
+    .pipe($.istanbul.writeReports())
+})
+
+gulp.task('default', ['test'])
