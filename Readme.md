@@ -36,15 +36,10 @@ This RFC does not limit the message size except to say that the ***receiver*** m
 does not impose a length limit when conforming to this RFC. There are a couple of things to note, though:
 
 1. We do not currently support the structured data portion of the log header. This section of each log is always `-`.
-2. The message portion of the log is prefixed with `BOM` to indicate it is UTF-8 encoded. This is in compliance with
-  [RFC4627][rfc4627] (JSON), section 6. This prefix is applied regardless of whether or not the `messageOnly` option
-  is `true`.
-3. If the data to be logged includes `req.id` then it will be used as the message id portion of the log. For example,
+2. If the data to be logged includes `req.id` then it will be used as the message id portion of the log. For example,
   the data `{req: {id: '1234'}}` would have '1234' as the message id in the resulting formatted log.
 
 These caveats may be configurable in a later version.
-
-[rfc4627]: https://tools.ietf.org/html/rfc4627
 
 ## Example
 
@@ -57,7 +52,7 @@ Given the log:
 *pino-syslog* will write out:
 
 ```
-<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOM{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
+<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - {"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
 ```
 
 Or, in RFC3164 mode:
@@ -70,7 +65,7 @@ Putting it all together:
 
 ```bash
 $ echo '{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}' | node pino-syslog                                                       [s:0 l:8025]
-<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOM{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
+<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - {"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
 ```
 
 ## Install
