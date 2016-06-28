@@ -1,3 +1,6 @@
+### 1.0.2
++ remove 5424 BOM prefix due to it being totally wrong (may be added back later)
+
 ### 1.0.1
 + add code to prevent app quitting after processing first log
 

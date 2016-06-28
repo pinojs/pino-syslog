@@ -15,7 +15,7 @@ function configPath () {
 suite('5424', function () {
   suite('simple messages', function () {
     test('hello world', function (done) {
-      const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOM'
+      const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - '
       const psyslog = spawn('node', [ psyslogPath ])
 
       psyslog.stdout.on('data', (data) => {
@@ -31,7 +31,7 @@ suite('5424', function () {
 
   suite('using non-default config', function () {
     test('formats to message only', function (done) {
-      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOMhello world'
+      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'messageOnly.json') ])
 
       psyslog.stdout.on('data', (data) => {
@@ -45,7 +45,7 @@ suite('5424', function () {
     })
 
     test('sets application name', function (done) {
-      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 test 94473 - - BOMhello world'
+      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 test 94473 - - hello world'
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'appname.json') ])
 
       psyslog.stdout.on('data', (data) => {
@@ -59,7 +59,7 @@ suite('5424', function () {
     })
 
     test('sets facility', function (done) {
-      const expected = '<6>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOMhello world'
+      const expected = '<6>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'facility.json') ])
 
       psyslog.stdout.on('data', (data) => {
@@ -73,7 +73,7 @@ suite('5424', function () {
     })
 
     test('sets timezone', function (done) {
-      const expected = '<134>1 2016-04-01T12:44:58-04:00 MacBook-Pro-3 - 94473 - - BOMhello world'
+      const expected = '<134>1 2016-04-01T12:44:58-04:00 MacBook-Pro-3 - 94473 - - hello world'
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'tz.json') ])
 
       psyslog.stdout.on('data', (data) => {
@@ -87,7 +87,7 @@ suite('5424', function () {
     })
 
     test('prepends `@cee `', function (done) {
-      const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOM@cee: '
+      const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - @cee: '
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'cee.json') ])
 
       psyslog.stdout.on('data', (data) => {
@@ -102,7 +102,7 @@ suite('5424', function () {
     })
 
     test('does not prepend `@cee ` for non-json messages', function (done) {
-      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOMhello world'
+      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'ceeMessageOnly.json') ])
 
       psyslog.stdout.on('data', (data) => {
