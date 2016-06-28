@@ -25,6 +25,7 @@ if (args.config) {
 }
 
 const defaults = {
+  modern: true,
   appname: 'none',
   cee: false,
   facility: 16,
@@ -35,6 +36,11 @@ const defaults = {
 
 const options = Object.assign(defaults, userOptions)
 
-const myTransport = require(path.join(__dirname, 'lib', 'rfc3164.js'))(options)
+let myTransport
+if (options.modern) {
+  myTransport = require(path.join(__dirname, 'lib', 'rfc5424.js'))(options)
+} else {
+  myTransport = require(path.join(__dirname, 'lib', 'rfc3164.js'))(options)
+}
 
 pump(process.stdin, split2(JSON.parse), myTransport)

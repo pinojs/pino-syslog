@@ -1,7 +1,8 @@
 # pino-syslog
 
 *pino-syslog* is a so called "transport" for the [pino][pino] logger. *pino-syslog* receives *pino* logs from `stdin`
-and transforms them into [RFC3164][syslog] (syslog) formatted messages, which are written to `stdout`.
+and transforms them into [RFC3164][rfc3164] or [RFC5424][rfc5424] (syslog) formatted messages which are written to
+`stdout`. The default output format is RFC5424.
 
 This transport **does not** send messages to a remote, or even local, syslog compatible server. It merely reformats the
 logs into syslog compatible strings. To send logs to a syslog server, use the [pino-socket][pino-socket] transport.
@@ -11,8 +12,15 @@ For example:
 $ node your-app.js | pino-syslog | pino-socket -a syslog.example.com
 ```
 
-**Message length:** the RFC mandates that the maximum number of bytes that a syslog message may be is `1024`. Thus,
-*pino-transport* will do one of two things when this limit is exceeded:
+[pino]: https://www.npmjs.com/package/pino
+[rfc3164]: https://tools.ietf.org/html/rfc3164
+[rfc5424]: https://tools.ietf.org/html/rfc5424
+[pino-socket]: https://www.npmjs.com/package/pino-socket
+
+## RFC3164
+
+This RFC mandates that the maximum number of bytes that a syslog message may be
+is `1024`. Thus, *pino-syslog* will do one of two things when this limit is exceeded:
 
 1. Output a JSON error log, with syslog header, that includes the original log's `time` and `level` properties, a
   `originalSize` property set to the number of bytes the original log message consumed, and a `msg` property set to
@@ -22,9 +30,21 @@ $ node your-app.js | pino-syslog | pino-socket -a syslog.example.com
 This means you *can* lose data if your log messages are too large. If that is to be the case, you should investigate
 the `includeProperties` option to reduce your log size. But, really, you should investigate what it is you are logging.
 
-[pino]: https://www.npmjs.com/package/pino
-[syslog]: https://tools.ietf.org/html/rfc3164
-[pino-socket]: https://www.npmjs.com/package/pino-socket
+## RFC5424
+
+This RFC does not limit the message size except to say that the ***receiver*** may impose a maximum. Thus, *pino-syslog*
+does not impose a length limit when conforming to this RFC. There are a couple of things to note, though:
+
+1. We do not currently support the structured data portion of the log header. This section of each log is always `-`.
+2. The message portion of the log is prefixed with `BOM` to indicate it is UTF-8 encoded. This is in compliance with
+  [RFC4627][rfc4627] (JSON), section 6. This prefix is applied regardless of whether or not the `messageOnly` option
+  is `true`.
+3. If the data to be logged includes `req.id` then it will be used as the message id portion of the log. For example,
+  the data `{req: {id: '1234'}}` would have '1234' as the message id in the resulting formatted log.
+
+These caveats may be configurable in a later version.
+
+[rfc4627]: https://tools.ietf.org/html/rfc4627
 
 ## Example
 
@@ -37,6 +57,12 @@ Given the log:
 *pino-syslog* will write out:
 
 ```
+<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOM{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
+```
+
+Or, in RFC3164 mode:
+
+```
 <134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: {"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
 ```
 
@@ -44,7 +70,7 @@ Putting it all together:
 
 ```bash
 $ echo '{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}' | node pino-syslog                                                       [s:0 l:8025]
-<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: {"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
+<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - BOM{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
 ```
 
 ## Install
@@ -65,6 +91,7 @@ There is only one argument available: `--config` (`-c`). This argument is used t
 
 ```json
 {
+  "modern": true,
   "appname": "none",
   "cee": false,
   "facility": 16,
@@ -74,6 +101,7 @@ There is only one argument available: `--config` (`-c`). This argument is used t
 }
 ```
 
++ `modern` (boolean): indicates if RFC5424 (`true`) or RFC3164 (`false`) should be used.
 + `appname` (string): sets the name of the application in the 'TAG' portion of the syslog header.
 + `cee` (boolean): denotes whether or not to prefix the message field with `@cee: `. This will only work if
   `messageOnly` is `false`.
