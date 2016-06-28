@@ -44,3 +44,4 @@ if (options.modern) {
 }
 
 pump(process.stdin, split2(JSON.parse), myTransport)
+process.on('SIGINT', () => { process.exit(0) })
