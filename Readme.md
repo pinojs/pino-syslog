@@ -1,5 +1,7 @@
 # pino-syslog
 
+**Lead maintainer:** [jsumners](https://github.com/jsumners)
+
 *pino-syslog* is a so called "transport" for the [pino][pino] logger. *pino-syslog* receives *pino* logs from `stdin`
 and transforms them into [RFC3164][rfc3164] or [RFC5424][rfc5424] (syslog) formatted messages which are written to
 `stdout`. The default output format is RFC5424.

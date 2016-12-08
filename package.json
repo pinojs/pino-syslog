@@ -1,8 +1,8 @@
 {
   "name": "pino-syslog",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A transport for pino that formats messages into syslog format",
-  "homepage": "https://github.com/jsumners/pino-syslog",
+  "homepage": "https://github.com/pinojs/pino-syslog",
   "main": "psyslog.js",
   "scripts": {
     "test": "gulp test"
@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jsumners/pino-syslog.git"
+    "url": "https://github.com/pinojs/pino-syslog.git"
   },
   "precommit": [
     "lint",
@@ -28,21 +28,21 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
-    "gulp-istanbul": "^1.0.0",
-    "gulp-load-plugins": "^1.2.4",
-    "gulp-mocha": "^2.2.0",
-    "gulp-standard": "^7.0.1",
-    "istanbul": "^0.4.4",
-    "mocha": "^2.5.3",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-mocha": "^3.0.1",
+    "gulp-standard": "^8.0.2",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
     "pre-commit": "^1.1.3",
-    "standard": "^7.1.2"
+    "standard": "^8.6.0"
   },
   "dependencies": {
-    "fast-safe-stringify": "^1.0.9",
-    "moment-timezone": "^0.5.4",
+    "fast-safe-stringify": "^1.1.3",
+    "moment-timezone": "^0.5.10",
     "nopt": "^3.0.6",
     "pump": "^1.0.1",
     "split2": "^2.1.0",
-    "through2": "^2.0.1"
+    "through2": "^2.0.3"
   }
 }
