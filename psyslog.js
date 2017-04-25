@@ -38,9 +38,9 @@ const options = Object.assign(defaults, userOptions)
 
 let myTransport
 if (options.modern) {
-  myTransport = require(path.join(__dirname, 'lib', 'rfc5424.js'))(options)
+  myTransport = require('./lib/rfc5424.js')(options)
 } else {
-  myTransport = require(path.join(__dirname, 'lib', 'rfc3164.js'))(options)
+  myTransport = require('./lib/rfc3164.js')(options)
 }
 
 pump(process.stdin, split2(JSON.parse), myTransport)
