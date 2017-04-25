@@ -11,6 +11,21 @@ function configPath () {
   return path.join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
 }
 
+test('skips non-json input', (t) => {
+  t.plan(1)
+  const psyslog = spawn('node', [psyslogPath])
+
+  psyslog.stdout.on('data', (data) => {
+    t.fail('should not receive any data')
+  })
+
+  psyslog.on('close', (code) => {
+    t.is(code, 0)
+  })
+
+  psyslog.stdin.end('this is not json\n')
+})
+
 test('hello world', (t) => {
   t.plan(1)
   const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - '

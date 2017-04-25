@@ -4,6 +4,7 @@ const nopt = require('nopt')
 const path = require('path')
 const pump = require('pump')
 const split2 = require('split2')
+const parseJson = require('fast-json-parse')
 
 const longOpts = {
   config: String
@@ -43,5 +44,11 @@ if (options.modern) {
   myTransport = require('./lib/rfc3164.js')(options)
 }
 
-pump(process.stdin, split2(JSON.parse), myTransport)
+function parser (str) {
+  const result = parseJson(str)
+  if (result.err) return
+  return result.value
+}
+
+pump(process.stdin, split2(parser), myTransport)
 process.on('SIGINT', () => { process.exit(0) })

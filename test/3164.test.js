@@ -11,6 +11,21 @@ function configPath () {
   return path.join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
 }
 
+test('skips non-json input', (t) => {
+  t.plan(1)
+  const psyslog = spawn('node', [psyslogPath])
+
+  psyslog.stdout.on('data', (data) => {
+    t.fail('should not receive any data')
+  })
+
+  psyslog.on('close', (code) => {
+    t.is(code, 0)
+  })
+
+  psyslog.stdin.end('this is not json\n')
+})
+
 test('returns error for overly long rfc3164 messages', (t) => {
   t.plan(1)
   const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: @cee: {"level":30,"time":1459529098958,"msg":"message exceeded syslog 1024 byte limit","originalSize":1110}'
