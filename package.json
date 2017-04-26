@@ -1,12 +1,12 @@
 {
   "name": "pino-syslog",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A transport for pino that formats messages into syslog format",
   "homepage": "https://github.com/pinojs/pino-syslog",
   "main": "psyslog.js",
   "scripts": {
-    "test": "gulp test",
-    "lint": "gulp lint"
+    "test": "tap --no-cov 'test/**/*.test.js'",
+    "lint": "standard"
   },
   "bin": {
     "pino-syslog": "./app.js"
@@ -27,23 +27,18 @@
     "test"
   ],
   "devDependencies": {
-    "chai": "^3.5.0",
-    "gulp": "^3.9.1",
-    "gulp-istanbul": "^1.1.1",
-    "gulp-load-plugins": "^1.4.0",
-    "gulp-mocha": "^3.0.1",
-    "gulp-standard": "^8.0.2",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "pre-commit": "^1.1.3",
-    "standard": "^8.6.0"
+    "pre-commit": "^1.2.2",
+    "standard": "^10.0.2",
+    "tap": "^10.3.2"
   },
   "dependencies": {
-    "fast-safe-stringify": "^1.1.3",
-    "moment-timezone": "^0.5.10",
-    "nopt": "^3.0.6",
-    "pump": "^1.0.1",
-    "split2": "^2.1.0",
+    "fast-json-parse": "^1.0.2",
+    "fast-safe-stringify": "^1.1.13",
+    "moment-timezone": "^0.5.13",
+    "nopt": "^4.0.1",
+    "pump": "^1.0.2",
+    "split2": "^2.1.1",
     "through2": "^2.0.3"
   }
 }

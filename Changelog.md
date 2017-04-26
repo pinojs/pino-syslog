@@ -1,3 +1,6 @@
+### 1.0.4
++ See [releases page](https://github.com/pinojs/pino-syslog/releases) for current and all future changes.
+
 ### 1.0.2
 + remove 5424 BOM prefix due to it being totally wrong (may be added back later)
 
