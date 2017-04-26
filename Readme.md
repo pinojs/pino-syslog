@@ -94,7 +94,8 @@ There is only one argument available: `--config` (`-c`). This argument is used t
   "facility": 16,
   "includeProperties": [],
   "messageOnly": false,
-  "tz": "Etc/UTC"
+  "tz": "Etc/UTC",
+  "newline": false
 }
 ```
 
@@ -109,6 +110,7 @@ There is only one argument available: `--config` (`-c`). This argument is used t
   if it should be stringified JSON.
 + `tz` (string): any [valid timezone string][tzstring] that [moment][moment] will recognize. The timestamp field of the
   syslog header will be sent according to this setting.
++ `newline` (boolean): terminate with newline for receivers like Papertrail
 
 [facility]: https://tools.ietf.org/html/rfc3164#section-4.1.1
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones

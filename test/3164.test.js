@@ -3,7 +3,7 @@
 const path = require('path')
 const spawn = require('child_process').spawn
 const test = require('tap').test
-const EOL = require('os').EOL;
+const EOL = require('os').EOL
 
 const messages = require(path.join(__dirname, 'fixtures', 'messages'))
 const psyslogPath = path.join(path.resolve(__dirname, '..', 'psyslog'))
@@ -140,16 +140,15 @@ test('truncates overly long message only log', (t) => {
 })
 
 test('appends newline', (t) => {
-  t.plan(1);
+  t.plan(1)
   const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: ' + messages.helloWorld + EOL
   const psyslog = spawn('node', [ psyslogPath, '-c', configPath('3164', 'newline.json') ])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected);
+    t.is(msg, expected)
     psyslog.kill()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
-
