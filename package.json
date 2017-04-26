@@ -5,7 +5,8 @@
   "homepage": "https://github.com/pinojs/pino-syslog",
   "main": "psyslog.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "lint": "gulp lint"
   },
   "bin": {
     "pino-syslog": "./app.js"

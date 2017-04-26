@@ -4,6 +4,7 @@
 const path = require('path')
 const spawn = require('child_process').spawn
 const expect = require('chai').expect
+const EOL = require('os').EOL
 
 const messages = require(path.join(__dirname, 'fixtures', 'messages'))
 const psyslogPath = path.join(path.resolve(__dirname, '..', 'psyslog'))
@@ -126,6 +127,20 @@ suite('3164', function () {
       })
 
       psyslog.stdin.write(messages.stupidLong + '\n')
+    })
+
+    test('appends newline', function (done) {
+      const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: ' + messages.helloWorld + EOL
+      const psyslog = spawn('node', [ psyslogPath, '-c', configPath('3164', 'newline.json') ])
+
+      psyslog.stdout.on('data', (data) => {
+        const msg = data.toString()
+        expect(msg).to.equal(expected)
+        psyslog.kill()
+        done()
+      })
+
+      psyslog.stdin.write(messages.helloWorld + '\n')
     })
   })
 })

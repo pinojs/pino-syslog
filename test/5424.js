@@ -4,6 +4,7 @@
 const path = require('path')
 const spawn = require('child_process').spawn
 const expect = require('chai').expect
+const EOL = require('os').EOL
 
 const messages = require(path.join(__dirname, 'fixtures', 'messages'))
 const psyslogPath = path.join(path.resolve(__dirname, '..', 'psyslog'))
@@ -104,6 +105,20 @@ suite('5424', function () {
     test('does not prepend `@cee ` for non-json messages', function (done) {
       const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
       const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'ceeMessageOnly.json') ])
+
+      psyslog.stdout.on('data', (data) => {
+        const msg = data.toString()
+        expect(msg).to.equal(expected)
+        psyslog.kill()
+        done()
+      })
+
+      psyslog.stdin.write(messages.helloWorld + '\n')
+    })
+
+    test('appends newline', function (done) {
+      const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - ' + messages.helloWorld + EOL
+      const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'newline.json') ])
 
       psyslog.stdout.on('data', (data) => {
         const msg = data.toString()
