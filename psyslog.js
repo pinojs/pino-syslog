@@ -32,7 +32,8 @@ const defaults = {
   facility: 16,
   includeProperties: [],
   messageOnly: false,
-  tz: 'Etc/UTC'
+  tz: 'Etc/UTC',
+  newline: false
 }
 
 const options = Object.assign(defaults, userOptions)
