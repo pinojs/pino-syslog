@@ -33,7 +33,8 @@ const defaults = {
   includeProperties: [],
   messageOnly: false,
   tz: 'Etc/UTC',
-  newline: false
+  newline: false,
+  structuredData: 'none'
 }
 
 const options = Object.assign(defaults, userOptions)

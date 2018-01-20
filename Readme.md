@@ -95,7 +95,8 @@ There is only one argument available: `--config` (`-c`). This argument is used t
   "includeProperties": [],
   "messageOnly": false,
   "tz": "Etc/UTC",
-  "newline": false
+  "newline": false,
+  "structuredData": "none"
 }
 ```
 
@@ -111,6 +112,7 @@ There is only one argument available: `--config` (`-c`). This argument is used t
 + `tz` (string): any [valid timezone string][tzstring] that [moment][moment] will recognize. The timestamp field of the
   syslog header will be sent according to this setting.
 + `newline` (boolean): terminate with a newline
++ `structuredData` (string): structured data to send with an RFC5424 message.
 
 [facility]: https://tools.ietf.org/html/rfc3164#section-4.1.1
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
