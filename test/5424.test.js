@@ -137,3 +137,17 @@ test('appends newline', (t) => {
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
+
+test('uses structured data', (t) => {
+  t.plan(1)
+  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - [a@b x="y"] ' + messages.helloWorld
+  const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'structuredData.json') ])
+
+  psyslog.stdout.on('data', (data) => {
+    const msg = data.toString()
+    t.is(msg, expected)
+    psyslog.kill()
+  })
+
+  psyslog.stdin.write(messages.helloWorld + '\n')
+})
