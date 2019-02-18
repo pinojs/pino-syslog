@@ -82,6 +82,34 @@ test('sets facility', (t) => {
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
+test('format timestamp with leading zero in days', (t) => {
+  t.plan(1)
+  const expected = '<134>Feb  3 02:20:00 MacBook-Pro-3 none[94473]: hello world'
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('3164', 'date.json')])
+
+  psyslog.stdout.on('data', (data) => {
+    const msg = data.toString()
+    t.is(msg, expected)
+    psyslog.kill()
+  })
+
+  psyslog.stdin.write(messages.leadingDay + '\n')
+})
+
+test('format timestamp with trailing zero in days', (t) => {
+  t.plan(1)
+  const expected = '<134>Feb 10 02:20:00 MacBook-Pro-3 none[94473]: hello world'
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('3164', 'date.json')])
+
+  psyslog.stdout.on('data', (data) => {
+    const msg = data.toString()
+    t.is(msg, expected)
+    psyslog.kill()
+  })
+
+  psyslog.stdin.write(messages.trailingDay + '\n')
+})
+
 test('sets timezone', (t) => {
   t.plan(1)
   const expected = '<134>Apr  1 12:44:58 MacBook-Pro-3 none[94473]: hello world'
