@@ -26,6 +26,7 @@ const longOpts = {
   messageOnly: Boolean,
   tz: String,
   newline: Boolean,
+  structuredData: String,
   config: String
 }
 
@@ -36,6 +37,7 @@ const shortOpts = {
   p: '--includeProperties',
   mo: '--messageOnly',
   n: '--newline',
+  s: '--structuredData',
   c: '--config'
 }
 
