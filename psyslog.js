@@ -6,26 +6,7 @@ const pump = require('pump')
 const split2 = require('split2')
 const parseJson = require('fast-json-parse')
 
-const longOpts = {
-  config: String
-}
-
-const shortOpts = {
-  c: '--config'
-}
-
-const args = nopt(longOpts, shortOpts)
-
-let userOptions = {}
-if (args.config) {
-  try {
-    userOptions = require(path.resolve(args.config))
-  } catch (e) {
-    process.stderr.write(`could not load settings file, using defaults: ${e.message}`)
-  }
-}
-
-const defaults = {
+let options = {
   modern: true,
   appname: 'none',
   cee: false,
@@ -36,7 +17,40 @@ const defaults = {
   newline: false
 }
 
-const options = Object.assign(defaults, userOptions)
+const longOpts = {
+  modern: Boolean,
+  appname: String,
+  cee: Boolean,
+  facility: Number,
+  includeProperties: String,
+  messageOnly: Boolean,
+  tz: String,
+  newline: Boolean,
+  config: String
+}
+
+const shortOpts = {
+  m: '--modern',
+  a: '--appname',
+  f: '--facility',
+  p: '--includeProperties',
+  mo: '--messageOnly',
+  n: '--newline',
+  c: '--config'
+}
+
+const args = nopt(longOpts, shortOpts)
+options = Object.assign(options, args)
+
+let userOptions = {}
+if (args.config) {
+  try {
+    userOptions = require(path.resolve(args.config))
+  } catch (e) {
+    process.stderr.write(`could not load settings file, using defaults: ${e.message}`)
+  }
+  options = Object.assign(options, userOptions)
+}
 
 let myTransport
 if (options.modern) {
