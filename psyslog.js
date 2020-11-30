@@ -6,7 +6,7 @@ const pump = require('pump')
 const split2 = require('split2')
 const parseJson = require('fast-json-parse')
 
-let options = {
+const defaults = {
   modern: true,
   appname: 'none',
   cee: false,
@@ -40,7 +40,7 @@ const shortOpts = {
 }
 
 const args = nopt(longOpts, shortOpts)
-options = Object.assign(options, args)
+let options = Object.assign({}, defaults, args)
 
 let userOptions = {}
 if (args.config) {
@@ -49,7 +49,7 @@ if (args.config) {
   } catch (e) {
     process.stderr.write(`could not load settings file, using defaults: ${e.message}`)
   }
-  options = Object.assign(options, userOptions)
+  options = Object.assign({}, options, userOptions)
 }
 
 let myTransport
