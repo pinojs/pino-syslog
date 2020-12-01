@@ -80,7 +80,7 @@ $ npm install --production -g pino-syslog
 
 ## Configuration
 
-*pino-syslog* supports configuration via a JSON file and/or using option flags; the JSON configuration takes precedence over CLI flags. The default options are:
+*pino-syslog* supports configuration using option flags and/or via a JSON file. The option flags take precedence over the JSON configuration. The default options are:
 
 ```json
 {

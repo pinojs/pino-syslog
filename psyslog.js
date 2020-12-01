@@ -44,14 +44,14 @@ const shortOpts = {
 const args = nopt(longOpts, shortOpts)
 let options = Object.assign({}, defaults, args)
 
-let userOptions = {}
+let jsonOptions = {}
 if (args.config) {
   try {
-    userOptions = require(path.resolve(args.config))
+    jsonOptions = require(path.resolve(args.config))
   } catch (e) {
     process.stderr.write(`could not load settings file, using defaults: ${e.message}`)
   }
-  options = Object.assign({}, options, userOptions)
+  options = Object.assign({}, jsonOptions, options)
 }
 
 let myTransport
