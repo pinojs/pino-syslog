@@ -78,13 +78,9 @@ You should install *pino-syslog* globally so that it can be used as a utility:
 $ npm install --production -g pino-syslog
 ```
 
-## Command Line Arguments
+## Configuration
 
-There is only one argument available: `--config` (`-c`). This argument is used to load a JSON configuration file.
-
-### Configuration
-
-*pino-syslog* supports configuration via a JSON file. The default options are:
+*pino-syslog* supports configuration using option flags and/or via a JSON file. The option flags take precedence over the JSON configuration. The default options are:
 
 ```json
 {
@@ -100,19 +96,23 @@ There is only one argument available: `--config` (`-c`). This argument is used t
 }
 ```
 
-+ `modern` (boolean): indicates if RFC5424 (`true`) or RFC3164 (`false`) should be used.
-+ `appname` (string): sets the name of the application in the 'TAG' portion of the syslog header.
-+ `cee` (boolean): denotes whether or not to prefix the message field with `@cee: `. This will only work if
+This also shows the full structure of a configuration file, which can be loaded using `--config <path-to-file>` (`-c <path-to-file>`).
+
+### Option flags
+
++ `--modern` (`-m`) (boolean): indicates if RFC5424 (`true`) or RFC3164 (`false`) should be used.
++ `--appname` (`-a`) (string): sets the name of the application in the 'TAG' portion of the syslog header.
++ `--cee` (boolean): denotes whether or not to prefix the message field with `@cee: `. This will only work if
   `messageOnly` is `false`.
-+ `facility` (number): a valid [facility number][facility], `[0 - 23]`.
-+ `includeProperties` (array<string>): a list of property names from the original *pino* log to include in the formatted
++ `--facility` (`-f`) (number): a valid [facility number][facility], `[0 - 23]`.
++ `--includeProperties` (`-p`) (array<string>): a list of property names from the original *pino* log to include in the formatted
   message. This is only applicable if `messageOnly` is `false`.
-+ `messageOnly` (boolean): indicates if the message field should contain only the `msg` property of the *pino* log, or
++ `--messageOnly` (`-mo`) (boolean): indicates if the message field should contain only the `msg` property of the *pino* log, or
   if it should be stringified JSON.
-+ `tz` (string): any [valid timezone string][tzstring] that [moment][moment] will recognize. The timestamp field of the
++ `--tz` (string): any [valid timezone string][tzstring] that [moment][moment] will recognize. The timestamp field of the
   syslog header will be sent according to this setting.
-+ `newline` (boolean): terminate with a newline
-+ `structuredData` (string): [structured data](https://tools.ietf.org/html/rfc5424#section-6.3) to send with an RFC5424 message.
++ `--newline` (`-n`) (boolean): terminate with a newline
++ `--structuredData` (`-s`) (string): [structured data](https://tools.ietf.org/html/rfc5424#section-6.3) to send with an RFC5424 message.
 
 [facility]: https://tools.ietf.org/html/rfc3164#section-4.1.1
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
