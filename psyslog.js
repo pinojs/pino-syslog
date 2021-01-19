@@ -42,7 +42,6 @@ const shortOpts = {
 }
 
 const args = nopt(longOpts, shortOpts)
-let options = Object.assign({}, defaults, args)
 
 let jsonOptions = {}
 if (args.config) {
@@ -51,8 +50,9 @@ if (args.config) {
   } catch (e) {
     process.stderr.write(`could not load settings file, using defaults: ${e.message}`)
   }
-  options = Object.assign({}, jsonOptions, options)
 }
+
+const options = Object.assign({}, defaults, jsonOptions, args);
 
 let myTransport
 if (options.modern) {
