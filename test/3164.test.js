@@ -20,7 +20,7 @@ test('skips non-json input', (t) => {
   })
 
   psyslog.on('close', (code) => {
-    t.is(code, 0)
+    t.equal(code, 0)
   })
 
   psyslog.stdin.end('this is not json\n')
@@ -33,7 +33,7 @@ test('returns error for overly long rfc3164 messages', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -47,7 +47,7 @@ test('formats to message only', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -61,7 +61,7 @@ test('sets application name', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -75,7 +75,7 @@ test('sets facility', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -89,7 +89,7 @@ test('format timestamp with leading zero in days', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -103,7 +103,7 @@ test('format timestamp with trailing zero in days', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -117,7 +117,7 @@ test('sets timezone', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -131,7 +131,7 @@ test('prepends `@cee `', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, header + messages.helloWorld)
+    t.equal(msg, header + messages.helloWorld)
     psyslog.kill()
   })
 
@@ -145,7 +145,7 @@ test('does not prepend `@cee ` for non-json messages', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -159,7 +159,7 @@ test('truncates overly long message only log', (t) => {
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
@@ -169,11 +169,11 @@ test('truncates overly long message only log', (t) => {
 test('appends newline', (t) => {
   t.plan(1)
   const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: ' + messages.helloWorld + '\n'
-  const psyslog = spawn('node', [ psyslogPath, '-c', configPath('3164', 'newline.json') ])
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('3164', 'newline.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.is(msg, expected)
+    t.equal(msg, expected)
     psyslog.kill()
   })
 
