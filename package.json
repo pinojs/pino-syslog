@@ -31,7 +31,7 @@
     "istanbul": "^0.4.5",
     "pre-commit": "^1.2.2",
     "standard": "^16.0.3",
-    "tap": "^11.0.1"
+    "tap": "^15.0.9"
   },
   "dependencies": {
     "fast-json-parse": "^1.0.2",
@@ -39,7 +39,7 @@
     "moment-timezone": "^0.5.13",
     "nopt": "^4.0.1",
     "pump": "^2.0.1",
-    "split2": "^2.1.1",
+    "split2": "^3.2.2",
     "through2": "^2.0.3"
   }
 }
