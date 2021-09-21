@@ -37,9 +37,9 @@
     "fast-json-parse": "^1.0.2",
     "fast-safe-stringify": "^2.0.2",
     "moment-timezone": "^0.5.13",
-    "nopt": "^4.0.1",
-    "pump": "^2.0.1",
+    "nopt": "^5.0.0",
+    "pump": "^3.0.0",
     "split2": "^3.2.2",
-    "through2": "^2.0.3"
+    "through2": "^4.0.2"
   }
 }
