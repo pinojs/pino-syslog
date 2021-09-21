@@ -5,8 +5,9 @@
   "homepage": "https://github.com/pinojs/pino-syslog",
   "main": "psyslog.js",
   "scripts": {
-    "test": "tap --no-cov 'test/**/*.test.js'",
-    "lint": "standard"
+    "test": "npm run lint && tap --no-cov 'test/**/*.test.js'",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "bin": {
     "pino-syslog": "./app.js"
@@ -29,7 +30,7 @@
   "devDependencies": {
     "istanbul": "^0.4.5",
     "pre-commit": "^1.2.2",
-    "standard": "^10.0.2",
+    "standard": "^16.0.3",
     "tap": "^11.0.1"
   },
   "dependencies": {

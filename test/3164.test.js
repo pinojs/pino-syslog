@@ -169,7 +169,7 @@ test('truncates overly long message only log', (t) => {
 test('appends newline', (t) => {
   t.plan(1)
   const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: ' + messages.helloWorld + '\n'
-  const psyslog = spawn('node', [ psyslogPath, '-c', configPath('3164', 'newline.json') ])
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('3164', 'newline.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()

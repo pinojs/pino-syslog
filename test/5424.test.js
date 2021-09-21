@@ -127,7 +127,7 @@ test('does not prepend `@cee ` for non-json messages', (t) => {
 test('appends newline', (t) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - ' + messages.helloWorld + '\n'
-  const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'newline.json') ])
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'newline.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
@@ -141,7 +141,7 @@ test('appends newline', (t) => {
 test('uses structured data', (t) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - [a@b x="y"] ' + messages.helloWorld
-  const psyslog = spawn('node', [ psyslogPath, '-c', configPath('5424', 'structuredData.json') ])
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'structuredData.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()

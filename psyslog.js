@@ -52,7 +52,7 @@ if (args.config) {
   }
 }
 
-const options = Object.assign({}, defaults, jsonOptions, args);
+const options = Object.assign({}, defaults, jsonOptions, args)
 
 let myTransport
 if (options.modern) {
