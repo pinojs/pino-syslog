@@ -6,4 +6,9 @@ const fs = require('fs')
 const realPath = fs.realpathSync(__dirname)
 const script = path.join(realPath, 'psyslog.js')
 
-require(script.toString())
+module.exports = require('./lib/transport')
+
+if (require.main === module) {
+  // used as cli
+  require(script.toString())
+}

@@ -3,7 +3,7 @@
   "version": "1.3.1",
   "description": "A transport for pino that formats messages into syslog format",
   "homepage": "https://github.com/pinojs/pino-syslog",
-  "main": "psyslog.js",
+  "main": "app.js",
   "scripts": {
     "test": "npm run lint && tap --no-cov 'test/**/*.test.js'",
     "lint": "standard",
@@ -29,6 +29,7 @@
   ],
   "devDependencies": {
     "istanbul": "^0.4.5",
+    "pino": "^7.0.0-rc.6",
     "pre-commit": "^1.2.2",
     "standard": "^16.0.3",
     "tap": "^15.0.9"
@@ -38,7 +39,9 @@
     "fast-safe-stringify": "^2.0.2",
     "moment-timezone": "^0.5.13",
     "nopt": "^5.0.0",
+    "pino-abstract-transport": "^0.3.0",
     "pump": "^3.0.0",
+    "sonic-boom": "^2.3.0",
     "split2": "^3.2.2",
     "through2": "^4.0.2"
   }

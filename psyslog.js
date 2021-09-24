@@ -5,17 +5,7 @@ const path = require('path')
 const pump = require('pump')
 const split2 = require('split2')
 const parseJson = require('fast-json-parse')
-
-const defaults = {
-  modern: true,
-  appname: 'none',
-  cee: false,
-  facility: 16,
-  includeProperties: [],
-  messageOnly: false,
-  tz: 'Etc/UTC',
-  newline: false
-}
+const { defaults } = require('./lib/utils')
 
 const longOpts = {
   modern: Boolean,
