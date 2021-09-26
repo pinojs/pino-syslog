@@ -78,7 +78,7 @@ You can use this module as a [pino transport](https://getpino.io/#/docs/transpor
 ```js
 const pino = require('pino')
 const transport = pino.transport({
-  target: 'pino-toke',
+  target: 'pino-syslog',
   level: 'info',
   options: {
     destination: 1, // optional (default stdout)
