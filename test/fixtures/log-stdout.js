@@ -10,7 +10,7 @@ const options = {
 }
 
 const transport = pino.transport({
-  target: join(__dirname, '../../app.js'),
+  target: join(__dirname, '../../lib/transport.js'),
   level: 'info',
   options
 })
