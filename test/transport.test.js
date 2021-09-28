@@ -79,16 +79,18 @@ test('syslog pino transport test rfc5424', async t => {
   t.ok(data[1].startsWith('<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line trailingDay')
 })
 
-test('tock pino transport test stdout', async t => {
+test('syslog pino transport test stdout', async t => {
   const result = spawnSync('node', [join(__dirname, 'fixtures', 'log-stdout.js'), '1'], {
     cwd: process.cwd()
   })
   t.equal(result.stdout.toString().trim(), '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world')
+  t.equal(result.status, 0)
 })
 
-test('tock pino transport test stderr', async t => {
+test('syslog pino transport test stderr', async t => {
   const result = spawnSync('node', [join(__dirname, 'fixtures', 'log-stdout.js'), '2'], {
     cwd: process.cwd()
   })
   t.equal(result.stderr.toString().trim(), '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world')
+  t.equal(result.status, 0)
 })
