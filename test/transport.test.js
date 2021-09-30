@@ -6,9 +6,10 @@ const { join } = require('path')
 const { once } = require('events')
 const { promisify } = require('util')
 const { spawnSync } = require('child_process')
-
 const { test } = require('tap')
+const { createTcpListener } = require('pino-socket/test/utils')
 const pino = require('pino')
+
 const pinoSyslog = join(__dirname, '..', 'lib', 'transport.js')
 const timeout = promisify(setTimeout)
 
@@ -93,4 +94,51 @@ test('syslog pino transport test stderr', async t => {
   })
   t.equal(result.stderr.toString().trim(), '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world')
   t.equal(result.status, 0)
+})
+
+test('pino pipeline', async t => {
+  const destination = join(os.tmpdir(), 'pino-transport-test.log')
+
+  const serverSocket = await createTcpListener((msg) => {
+    console.log(msg)
+    // t.ok(msg.startsWith('<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line leadingDay')
+    // t.ok(msg.startsWith('<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line trailingDay')
+  })
+
+  t.teardown(() => {
+    serverSocket.close()
+    serverSocket.unref()
+  })
+
+  const address = serverSocket.address().address
+  const port = serverSocket.address().port
+
+  const transport = pino.transport({
+    pipeline: [
+      {
+        target: pinoSyslog,
+        level: 'info',
+        options: {
+          enablePipelining: true,
+          ...getConfigPath('5424', 'newline.json')
+        }
+      },
+      {
+        target: 'pino-socket',
+        options: {
+          mode: 'tcp',
+          address,
+          port
+        }
+      }
+    ]
+  })
+  const log = pino(transport)
+  t.pass('built pino')
+  await once(transport, 'ready')
+  t.pass('transport ready ' + destination)
+
+  log.info(JSON.parse(messages.leadingDay))
+  log.debug(JSON.parse(messages.helloWorld)) // it is skipped
+  log.info(JSON.parse(messages.trailingDay))
 })
