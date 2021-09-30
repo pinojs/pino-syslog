@@ -97,12 +97,15 @@ test('syslog pino transport test stderr', async t => {
 })
 
 test('pino pipeline', async t => {
+  t.plan(4)
   const destination = join(os.tmpdir(), 'pino-transport-test.log')
 
+  const expected = [
+    '<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - ',
+    '<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '
+  ]
   const serverSocket = await createTcpListener((msg) => {
-    console.log(msg)
-    // t.ok(msg.startsWith('<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line leadingDay')
-    // t.ok(msg.startsWith('<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line trailingDay')
+    t.ok(msg.startsWith(expected.shift()))
   })
 
   t.teardown(() => {
@@ -141,4 +144,6 @@ test('pino pipeline', async t => {
   log.info(JSON.parse(messages.leadingDay))
   log.debug(JSON.parse(messages.helloWorld)) // it is skipped
   log.info(JSON.parse(messages.trailingDay))
+
+  await timeout(1000)
 })
