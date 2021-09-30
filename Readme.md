@@ -89,9 +89,39 @@ pino(transport)
 ```
 
 The options object's properties are [described below](#configuration).
-There is only one extra property:
+There is some extra properties:
 
 + `destination`: it must be an integer which is used to specify the destination of the log messages. `1` is stdout, `2` is stderr and others numbers must be a file descriptor.
++ `enablePipelining`: it must be set to `true`, only to enable the pino transport pipeline.
+
+### Pipelining
+
+To submit the `pino-syslog` output to another destination, such as a `socket`, you need to create a
+transport pipeline setting the `enablePipelining` option. In this case, the `destination` option is ignored.
+
+```js
+const transport = pino.transport({
+  pipeline: [
+    {
+      target: 'pino-syslog',
+      level: 'info',
+      options: {
+        enablePipelining: true,
+        ... // other options
+      }
+    },
+    {
+      target: 'pino-socket',
+      options: {
+        mode: 'tcp',
+        address: '127.0.0.1',
+        port: 8001
+      }
+    }
+  ]
+})
+pino(transport)
+```
 
 
 ## Usage as Pino Legacy Transport
