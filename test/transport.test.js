@@ -26,6 +26,7 @@ test('syslog pino transport test rfc3164', async t => {
   const fd = fs.openSync(destination, 'w+')
   const sysLogOptions = {
     destination: fd,
+    enablePipelining: false,
     ...getConfigPath('3164', 'newline.json')
   }
 
@@ -56,6 +57,7 @@ test('syslog pino transport test rfc5424', async t => {
   const fd = fs.openSync(destination, 'w+')
   const sysLogOptions = {
     destination: fd,
+    enablePipelining: false,
     ...getConfigPath('5424', 'newline.json')
   }
 
@@ -128,7 +130,6 @@ test('pino pipeline', t => {
             target: pinoSyslog,
             level: 'info',
             options: {
-              enablePipelining: true,
               ...getConfigPath('5424', 'newline.json')
             }
           },

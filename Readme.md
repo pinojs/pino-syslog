@@ -81,7 +81,8 @@ const transport = pino.transport({
   target: 'pino-syslog',
   level: 'info',
   options: {
-    destination: 1, // optional (default stdout)
+    enablePipelining: false, // optional (default: true)
+    destination: 1, // optional (default: stdout)
     ... // other options
   }
 })
@@ -91,13 +92,12 @@ pino(transport)
 The options object's properties are [described below](#configuration).
 There is some extra properties:
 
-+ `destination`: it must be an integer which is used to specify the destination of the log messages. `1` is stdout, `2` is stderr and others numbers must be a file descriptor.
-+ `enablePipelining`: it must be set to `true`, only to enable the pino transport pipeline.
++ `enablePipelining`: it must be set to `false` to disable the pino transport pipeline.
++ `destination`: it must be an integer which is used to specify the destination of the log messages. `1` is stdout, `2` is stderr and others numbers must be a file descriptor. This option is used only when the pipelining is disabled.
 
 ### Pipelining
 
-To submit the `pino-syslog` output to another destination, such as a `socket`, you need to create a
-transport pipeline setting the `enablePipelining` option. In this case, the `destination` option is ignored.
+This feature is enabled by default and let you to submit the `pino-syslog` output to another destination at your choice, such as a `socket` using the `pino-socket` module:
 
 ```js
 const transport = pino.transport({
@@ -106,7 +106,6 @@ const transport = pino.transport({
       target: 'pino-syslog',
       level: 'info',
       options: {
-        enablePipelining: true,
         ... // other options
       }
     },

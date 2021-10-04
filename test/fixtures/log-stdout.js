@@ -5,6 +5,7 @@ const { join } = require('path')
 
 const options = {
   destination: parseInt(process.argv[2]),
+  enablePipelining: false,
   cee: true,
   messageOnly: true
 }
