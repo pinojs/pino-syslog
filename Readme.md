@@ -70,7 +70,65 @@ $ echo '{"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","
 <134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - {"pid":94473,"hostname":"MacBook-Pro-3","level":30,"msg":"hello world","time":1459529098958,"v":1}
 ```
 
-## Install
+
+## Usage as Pino Transport
+
+You can use this module as a [pino transport](https://getpino.io/#/docs/transports?id=v7-transports) like so:
+
+```js
+const pino = require('pino')
+const transport = pino.transport({
+  target: 'pino-syslog',
+  level: 'info',
+  options: {
+    enablePipelining: false, // optional (default: true)
+    destination: 1, // optional (default: stdout)
+    ... // other options
+  }
+})
+pino(transport)
+```
+
+The options object's properties are [described below](#configuration).
+There is some extra properties:
+
++ `enablePipelining`: it must be set to `false` to disable the pino transport pipeline.
++ `destination`: it must be an integer which is used to specify the destination of the log messages. `1` is stdout, `2` is stderr and others numbers must be a file descriptor. This option is used only when the pipelining is disabled.
+
+### Pipelining
+
+This feature is enabled by default and let you to submit the `pino-syslog` output to another destination at your choice, such as a `socket` using the `pino-socket` module:
+
+```js
+const transport = pino.transport({
+  pipeline: [
+    {
+      target: 'pino-syslog',
+      level: 'info',
+      options: {
+        ... // other options
+      }
+    },
+    {
+      target: 'pino-socket',
+      options: {
+        mode: 'tcp',
+        address: '127.0.0.1',
+        port: 8001
+      }
+    }
+  ]
+})
+pino(transport)
+```
+
+
+## Usage as Pino Legacy Transport
+
+Pino supports a [legacy transport interface](https://getpino.io/#/docs/transports?id=legacy-transports)
+that is still supported by this module.
+
+### Install
 
 You should install *pino-syslog* globally so that it can be used as a utility:
 
