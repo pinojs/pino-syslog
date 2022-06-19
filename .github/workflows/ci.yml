@@ -32,7 +32,7 @@ jobs:
         uses: actions/dependency-review-action@v1
 
   test:
-    name: ${{ matrix.node-version }} ${{ matrix.os }}
+    name: Test
     runs-on: ${{ matrix.os }}
     permissions:
       contents: read
