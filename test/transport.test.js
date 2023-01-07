@@ -78,15 +78,15 @@ test('syslog pino transport test rfc5424', async t => {
   await timeout(1000)
 
   const data = fs.readFileSync(destination, 'utf8').trim().split('\n')
-  t.ok(data[0].startsWith('<134>1 2018-02-03T01:20:00+00:00 MacBook-Pro-3 - 94473 - - '), 'first line leadingDay')
-  t.ok(data[1].startsWith('<134>1 2018-02-10T01:20:00+00:00 MacBook-Pro-3 - 94473 - - '), 'first line trailingDay')
+  t.ok(data[0].startsWith('<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line leadingDay')
+  t.ok(data[1].startsWith('<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line trailingDay')
 })
 
 test('syslog pino transport test stdout', async t => {
   const result = spawnSync('node', ['--no-warnings', join(__dirname, 'fixtures', 'log-stdout.js'), '1'], {
     cwd: process.cwd()
   })
-  t.equal(result.stdout.toString().trim(), '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - hello world')
+  t.equal(result.stdout.toString().trim(), '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world')
   t.equal(result.status, 0)
 })
 
@@ -94,7 +94,7 @@ test('syslog pino transport test stderr', async t => {
   const result = spawnSync('node', ['--no-warnings', join(__dirname, 'fixtures', 'log-stdout.js'), '2'], {
     cwd: process.cwd()
   })
-  t.equal(result.stderr.toString().trim(), '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - hello world')
+  t.equal(result.stderr.toString().trim(), '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world')
   t.equal(result.status, 0)
 })
 
@@ -103,8 +103,8 @@ test('pino pipeline', t => {
   const destination = join(os.tmpdir(), 'pino-transport-test.log')
 
   const expected = [
-    '<134>1 2018-02-03T01:20:00+00:00 MacBook-Pro-3 - 94473 - - ',
-    '<134>1 2018-02-10T01:20:00+00:00 MacBook-Pro-3 - 94473 - - '
+    '<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - ',
+    '<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '
   ]
 
   createTcpListener(msg => {
