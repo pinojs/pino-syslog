@@ -28,7 +28,7 @@ test('skips non-json input', (t) => {
 
 test('hello world', (t) => {
   t.plan(1)
-  const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - '
+  const header = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - '
   const psyslog = spawn('node', [psyslogPath])
 
   psyslog.stdout.on('data', (data) => {
@@ -42,7 +42,7 @@ test('hello world', (t) => {
 
 test('formats to message only', (t) => {
   t.plan(1)
-  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
+  const expected = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'messageOnly.json')])
 
   psyslog.stdout.on('data', (data) => {
@@ -56,7 +56,7 @@ test('formats to message only', (t) => {
 
 test('sets application name', (t) => {
   t.plan(1)
-  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 test 94473 - - hello world'
+  const expected = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 test 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'appname.json')])
 
   psyslog.stdout.on('data', (data) => {
@@ -70,7 +70,7 @@ test('sets application name', (t) => {
 
 test('sets facility', (t) => {
   t.plan(1)
-  const expected = '<6>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
+  const expected = '<6>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'facility.json')])
 
   psyslog.stdout.on('data', (data) => {
@@ -98,7 +98,7 @@ test('sets timezone', (t) => {
 
 test('prepends `@cee `', (t) => {
   t.plan(1)
-  const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - @cee: '
+  const header = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - @cee: '
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'cee.json')])
 
   psyslog.stdout.on('data', (data) => {
@@ -112,7 +112,7 @@ test('prepends `@cee `', (t) => {
 
 test('does not prepend `@cee ` for non-json messages', (t) => {
   t.plan(1)
-  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
+  const expected = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'ceeMessageOnly.json')])
 
   psyslog.stdout.on('data', (data) => {
@@ -126,7 +126,7 @@ test('does not prepend `@cee ` for non-json messages', (t) => {
 
 test('appends newline', (t) => {
   t.plan(1)
-  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - ' + messages.helloWorld + '\n'
+  const expected = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - - ' + messages.helloWorld + '\n'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'newline.json')])
 
   psyslog.stdout.on('data', (data) => {
@@ -140,7 +140,7 @@ test('appends newline', (t) => {
 
 test('uses structured data', (t) => {
   t.plan(1)
-  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - [a@b x="y"] ' + messages.helloWorld
+  const expected = '<134>1 2016-04-01T16:44:58+00:00 MacBook-Pro-3 - 94473 - [a@b x="y"] ' + messages.helloWorld
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'structuredData.json')])
 
   psyslog.stdout.on('data', (data) => {
