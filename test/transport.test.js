@@ -35,6 +35,9 @@ test('syslog pino transport test rfc3164', async t => {
     level: 'info',
     options: sysLogOptions
   })
+  t.teardown(() => {
+    transport.end()
+  })
   const log = pino(transport)
   t.pass('built pino')
   await once(transport, 'ready')
@@ -65,6 +68,9 @@ test('syslog pino transport test rfc5424', async t => {
     target: pinoSyslog,
     level: 'info',
     options: sysLogOptions
+  })
+  t.teardown(() => {
+    transport.end()
   })
   const log = pino(transport)
   t.pass('built pino')
