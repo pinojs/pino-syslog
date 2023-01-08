@@ -148,7 +148,7 @@ $ npm install --production -g pino-syslog
   "facility": 16,
   "includeProperties": [],
   "messageOnly": false,
-  "tz": "Etc/UTC",
+  "tz": "UTC",
   "newline": false,
   "structuredData": "-"
 }
@@ -167,14 +167,14 @@ This also shows the full structure of a configuration file, which can be loaded 
   message. This is only applicable if `messageOnly` is `false`.
 + `--messageOnly` (`-mo`) (boolean): indicates if the message field should contain only the `msg` property of the *pino* log, or
   if it should be stringified JSON.
-+ `--tz` (string): any [valid timezone string][tzstring] that [moment][moment] will recognize. The timestamp field of the
++ `--tz` (string): any [valid timezone string][tzstring] that [luxon][luxon] will recognize. The timestamp field of the
   syslog header will be sent according to this setting.
 + `--newline` (`-n`) (boolean): terminate with a newline
 + `--structuredData` (`-s`) (string): [structured data](https://tools.ietf.org/html/rfc5424#section-6.3) to send with an RFC5424 message.
 
 [facility]: https://tools.ietf.org/html/rfc3164#section-4.1.1
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-[moment]: http://momentjs.com/timezone/docs/#/using-timezones/parsing-in-zone/
+[luxon]: https://moment.github.io/luxon/#/zones?id=specifying-a-zone
 
 ## License
 

@@ -38,7 +38,7 @@
   "dependencies": {
     "fast-json-parse": "^1.0.2",
     "fast-safe-stringify": "^2.0.2",
-    "moment-timezone": "^0.5.13",
+    "luxon": "^3.2.1",
     "nopt": "^5.0.0",
     "pino-abstract-transport": "^0.4.0",
     "pump": "^3.0.0",
