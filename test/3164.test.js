@@ -3,6 +3,14 @@
 const path = require('path')
 const spawn = require('child_process').spawn
 const test = require('tap').test
+const { join } = path
+const os = require('os')
+const fs = require('fs')
+const pino = require('pino')
+const { once } = require('events')
+
+const { promisify } = require('util')
+const timeout = promisify(setTimeout)
 
 const messages = require(path.join(__dirname, 'fixtures', 'messages'))
 const psyslogPath = path.join(path.resolve(__dirname, '..', 'psyslog'))
@@ -178,4 +186,45 @@ test('appends newline', (t) => {
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
+})
+
+function getConfigPath () {
+  const cpath = join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
+  return require(cpath)
+}
+
+const pinoSyslog = join(__dirname, '..', 'lib', 'transport.js')
+
+test('syslog pino transport test rfc3164', async t => {
+  const destination = join(os.tmpdir(), 'pino-transport-test.log')
+
+  const fd = fs.openSync(destination, 'w+')
+  const sysLogOptions = {
+    destination: fd,
+    enablePipelining: false,
+    ...getConfigPath('3164', 'newline.json')
+  }
+
+  const transport = pino.transport({
+    target: pinoSyslog,
+    level: 'info',
+    options: sysLogOptions
+  })
+  t.teardown(() => {
+    transport.end()
+  })
+  const log = pino(transport)
+  t.pass('built pino')
+  await once(transport, 'ready')
+  t.pass('transport ready ' + destination)
+
+  log.info(JSON.parse(messages.leadingDay))
+  log.debug(JSON.parse(messages.helloWorld)) // it is skipped
+  log.info(JSON.parse(messages.trailingDay))
+
+  await timeout(1000)
+
+  const data = fs.readFileSync(destination, 'utf8').trim().split('\n')
+  t.ok(data[0].startsWith('<134>Feb  3 01:20:00 MacBook-Pro-3 none[94473]: '), true, 'first line leadingDay')
+  t.ok(data[1].startsWith('<134>Feb 10 01:20:00 MacBook-Pro-3 none[94473]: '), true, 'first line trailingDay')
 })
