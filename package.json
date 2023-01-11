@@ -29,21 +29,21 @@
   ],
   "devDependencies": {
     "istanbul": "^0.4.5",
-    "pino": "^7.0.0-rc.8",
-    "pino-socket": "^4.0.1",
+    "pino": "^8.0.0",
+    "pino-socket": "^7.0.0",
     "pre-commit": "^1.2.2",
-    "standard": "^16.0.3",
-    "tap": "^15.0.9"
+    "standard": "^17.0.0",
+    "tap": "^16.0.0"
   },
   "dependencies": {
     "fast-json-parse": "^1.0.2",
     "fast-safe-stringify": "^2.0.2",
     "luxon": "^3.2.1",
     "nopt": "^5.0.0",
-    "pino-abstract-transport": "^0.4.0",
+    "pino-abstract-transport": "^1.0.0",
     "pump": "^3.0.0",
-    "sonic-boom": "^2.3.0",
-    "split2": "^3.2.2",
+    "sonic-boom": "^3.0.0",
+    "split2": "^4.0.0",
     "through2": "^4.0.2"
   }
 }
