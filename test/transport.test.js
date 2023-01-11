@@ -7,7 +7,6 @@ const { once } = require('events')
 const { promisify } = require('util')
 const { spawnSync } = require('child_process')
 const { test } = require('tap')
-const { createTcpListener } = require('pino-socket/test/utils')
 const pino = require('pino')
 
 const pinoSyslog = join(__dirname, '..', 'lib', 'transport.js')
@@ -103,4 +102,3 @@ test('syslog pino transport test stderr', async t => {
   t.equal(result.stderr.toString().trim(), '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world')
   t.equal(result.status, 0)
 })
-
