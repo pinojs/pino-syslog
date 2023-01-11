@@ -124,6 +124,7 @@ test('pino pipeline', t => {
       t.teardown(() => {
         serverSocket.close()
         serverSocket.unref()
+        transport.end()
       })
 
       const address = serverSocket.address().address
