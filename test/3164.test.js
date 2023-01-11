@@ -195,7 +195,7 @@ function getConfigPath () {
 
 const pinoSyslog = join(__dirname, '..', 'lib', 'transport.js')
 
-test('syslog pino transport test rfc3164', async t => {
+test('syslog pino transport test rfc3164', { only: true }, async t => {
   const destination = join(os.tmpdir(), 'pino-transport-test.log')
 
   const fd = fs.openSync(destination, 'w+')
@@ -209,9 +209,6 @@ test('syslog pino transport test rfc3164', async t => {
     target: pinoSyslog,
     level: 'info',
     options: sysLogOptions
-  })
-  t.teardown(() => {
-    transport.end()
   })
   const log = pino(transport)
   t.pass('built pino')

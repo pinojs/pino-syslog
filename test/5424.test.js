@@ -182,9 +182,6 @@ test('syslog pino transport test rfc5424', async t => {
     level: 'info',
     options: sysLogOptions
   })
-  t.teardown(() => {
-    transport.end()
-  })
   const log = pino(transport)
   t.pass('built pino')
   await once(transport, 'ready')
