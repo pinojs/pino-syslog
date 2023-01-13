@@ -1,6 +1,6 @@
 {
   "name": "pino-syslog",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A transport for pino that formats messages into syslog format",
   "homepage": "https://github.com/pinojs/pino-syslog",
   "main": "lib/transport.js",
