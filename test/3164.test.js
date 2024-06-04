@@ -188,6 +188,20 @@ test('appends newline', (t) => {
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
+test('write synchronously', (t) => {
+  t.plan(1)
+  const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 none[94473]: ' + messages.helloWorld
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('3164', 'sync.json')])
+
+  psyslog.stdout.on('data', (data) => {
+    const msg = data.toString()
+    t.equal(msg, expected)
+    psyslog.kill()
+  })
+
+  psyslog.stdin.write(messages.helloWorld + '\n')
+})
+
 function getConfigPath () {
   const cpath = join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
   return require(cpath)
