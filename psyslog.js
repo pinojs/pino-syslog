@@ -17,7 +17,8 @@ const longOpts = {
   tz: String,
   newline: Boolean,
   structuredData: String,
-  config: String
+  config: String,
+  sync: Boolean
 }
 
 const shortOpts = {
@@ -28,7 +29,8 @@ const shortOpts = {
   mo: '--messageOnly',
   n: '--newline',
   s: '--structuredData',
-  c: '--config'
+  c: '--config',
+  sy: '--sync'
 }
 
 const args = nopt(longOpts, shortOpts)

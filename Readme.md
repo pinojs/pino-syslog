@@ -150,7 +150,8 @@ $ npm install --production -g pino-syslog
   "messageOnly": false,
   "tz": "UTC",
   "newline": false,
-  "structuredData": "-"
+  "structuredData": "-",
+  "sync": false
 }
 ```
 
@@ -171,6 +172,7 @@ This also shows the full structure of a configuration file, which can be loaded 
   syslog header will be sent according to this setting.
 + `--newline` (`-n`) (boolean): terminate with a newline
 + `--structuredData` (`-s`) (string): [structured data](https://tools.ietf.org/html/rfc5424#section-6.3) to send with an RFC5424 message.
++ `--sync` (`-sy`) (boolean): perform writes synchronously
 
 [facility]: https://tools.ietf.org/html/rfc3164#section-4.1.1
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
