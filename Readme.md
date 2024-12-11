@@ -178,6 +178,26 @@ This also shows the full structure of a configuration file, which can be loaded 
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 [luxon]: https://moment.github.io/luxon/#/zones?id=specifying-a-zone
 
+### Custom levels
+
+You can now add custom levels but you have to make sure that your new custom level is supported by pino ([docs]([docs](https://github.com/pinojs/pino/blob/HEAD/docs/api.md#opt-customlevels)))
+
+The following configuration example shows how it is possible to add customized levels:
+
+```json
+{
+	"modern": true,
+  	"appname": "none",
+  	...
+  	"customLevel": {
+		"customLevel_bane": {
+			"level": 70, // Custom pino level.
+			"syslogSeverity": "alert" // Well-known syslog severity
+		}
+   	}
+}
+```
+
 ## License
 
 [MIT License](http://jsumners.mit-license.org/)
