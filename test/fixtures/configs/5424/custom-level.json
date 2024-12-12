@@ -1,0 +1,7 @@
+{
+	"appname": "test",
+	"messageOnly": true,
+	"customLevel": {
+		"unexpectedCodeBranch": { "level": 70, "syslogSeverity": "alert"}
+	} 
+}

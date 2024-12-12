@@ -202,6 +202,20 @@ test('write synchronously', (t) => {
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
+test('sets customLevels', (t) => {
+  t.plan(1)
+  const expected = '<134>Apr  1 16:44:58 MacBook-Pro-3 test[94473]: hello world'
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('3164', 'appname.json')])
+
+  psyslog.stdout.on('data', (data) => {
+    const msg = data.toString()
+    t.equal(msg, expected)
+    psyslog.kill()
+  })
+
+  psyslog.stdin.write(messages.helloWorld + '\n')
+})
+
 function getConfigPath () {
   const cpath = join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
   return require(cpath)

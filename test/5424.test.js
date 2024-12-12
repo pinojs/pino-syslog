@@ -174,6 +174,20 @@ test('uses structured data', (t) => {
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
+test('sets customLevels', (t) => {
+  t.plan(1)
+  const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 test 94473 - - hello world'
+  const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'custom-level.json')])
+
+  psyslog.stdout.on('data', (data) => {
+    const msg = data.toString()
+    t.equal(msg, expected)
+    psyslog.kill()
+  })
+
+  psyslog.stdin.write(messages.helloWorld + '\n')
+})
+
 function getConfigPath () {
   const cpath = join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
   return require(cpath)
