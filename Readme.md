@@ -189,8 +189,8 @@ The following configuration example shows how it is possible to add customized l
 	"modern": true,
   	"appname": "none",
   	...
-  	"customLevel": {
-		"customLevel_bane": {
+  	"customLevels": {
+		"customLevel_name": {
 			"level": 70, // Custom pino level.
 			"syslogSeverity": "alert" // Well-known syslog severity
 		}
