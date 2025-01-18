@@ -5,7 +5,7 @@ const path = require('path')
 const pump = require('pump')
 const split2 = require('split2')
 const parseJson = require('fast-json-parse')
-const { defaults } = require('./lib/utils')
+const { buildOptions } = require('./lib/utils')
 
 const longOpts = {
   modern: Boolean,
@@ -44,7 +44,7 @@ if (args.config) {
   }
 }
 
-const options = Object.assign({}, defaults, jsonOptions, args)
+const options = buildOptions(jsonOptions, args)
 
 let myTransport
 if (options.modern) {

@@ -178,6 +178,32 @@ This also shows the full structure of a configuration file, which can be loaded 
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 [luxon]: https://moment.github.io/luxon/#/zones?id=specifying-a-zone
 
+### Custom levels
+
+Custom [Pino levels](https://github.com/pinojs/pino/blob/HEAD/docs/api.md#opt-customlevels) are supported.
+They must be established through a mapping defined under the `customLevels`
+configuration key. `customLevels` is a hash of hashes. Each key under
+`customLevels` is a custom level name with a value that is a hash with
+keys `level` and `syslogSeverity`. The `level` key maps to the log level number,
+and the `syslogSeverity` key to the name of a spec compliant syslog level:
+"emergency", "alert", "critical", "error", "warning", "notice", "info", or
+"debug".
+
+The following example shows how to add customized levels:
+
+```json
+{
+  "modern": true,
+  "appname": "none",
+  "customLevels": {
+    "customLevel_name": {
+      "level": 70,
+      "syslogSeverity": "alert"
+    }
+  }
+}
+```
+
 ## License
 
 [MIT License](http://jsumners.mit-license.org/)
