@@ -197,9 +197,9 @@ The following example shows how to add customized levels:
   "appname": "none",
   "customLevels": {
     "customLevel_name": {
-	  "level": 70,
-	  "syslogSeverity": "alert"
-	}
+      "level": 70,
+      "syslogSeverity": "alert"
+    }
   }
 }
 ```

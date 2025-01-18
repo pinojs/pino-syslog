@@ -1,8 +1,8 @@
 {
-	"modern": false,
-	"appname": "test",
-	"messageOnly": true,
-	"customLevels": {
-		"unexpectedCodeBranch": { "level": 70, "syslogSeverity": "alert"}
-	} 
+  "modern": false,
+  "appname": "test",
+  "messageOnly": true,
+  "customLevels": {
+    "unexpectedCodeBranch": { "level": 70, "syslogSeverity": "alert"}
+  } 
 }
