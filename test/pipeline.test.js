@@ -21,8 +21,8 @@ test('pino pipeline', t => {
   const destination = join(os.tmpdir(), 'pino-transport-test.log')
 
   const expected = [
-    '<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - ',
-    '<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '
+    '<134>1 2018-02-03T01:20:00.000Z MacBook-Pro-3 - 94473 - - ',
+    '<134>1 2018-02-10T01:20:00.000Z MacBook-Pro-3 - 94473 - - '
   ]
 
   createTcpListener(msg => {
