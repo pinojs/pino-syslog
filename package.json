@@ -5,7 +5,7 @@
   "homepage": "https://github.com/pinojs/pino-syslog",
   "main": "lib/transport.js",
   "scripts": {
-    "test": "npm run lint && tap --no-cov 'test/**/*.test.js'",
+    "test": "npm run lint && borp 'test/*.test.js'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
@@ -23,30 +23,21 @@
     "type": "git",
     "url": "https://github.com/pinojs/pino-syslog.git"
   },
-  "precommit": [
-    "lint",
-    "test"
-  ],
   "devDependencies": {
-    "eslint": "^8.31.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.6.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "pino": "^8.8.0",
-    "pino-socket": "^7.3.0",
-    "pre-commit": "^1.2.2",
-    "tap": "^16.3.2"
+    "borp": "^1.0.0",
+    "eslint": "^9.39.3",
+    "neostandard": "^0.12.2",
+    "pino": "^10.3.1",
+    "pino-socket": "^8.0.0"
   },
   "dependencies": {
     "fast-json-parse": "^1.0.2",
     "fast-safe-stringify": "^2.0.2",
-    "luxon": "^3.2.1",
-    "nopt": "^7.0.0",
-    "pino-abstract-transport": "^1.0.0",
-    "pump": "^3.0.0",
-    "sonic-boom": "^3.2.1",
+    "luxon": "^3.7.2",
+    "nopt": "^9.0.0",
+    "pino-abstract-transport": "^3.0.0",
+    "pump": "^3.0.4",
+    "sonic-boom": "^4.2.1",
     "split2": "^4.1.0",
     "through2": "^4.0.2"
   }

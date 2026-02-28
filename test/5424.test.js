@@ -1,16 +1,15 @@
 'use strict'
 
-const path = require('path')
-const spawn = require('child_process').spawn
-const test = require('tap').test
-const os = require('os')
-const fs = require('fs')
+const test = require('node:test')
+const path = require('node:path')
+const os = require('node:os')
+const fs = require('node:fs')
+const { spawn } = require('node:child_process')
+const { once } = require('node:events')
+const { setTimeout: timeout } = require('node:timers/promises')
 const pino = require('pino')
-const { once } = require('events')
 
 const join = path.join
-const { promisify } = require('util')
-const timeout = promisify(setTimeout)
 
 const messages = require(path.join(__dirname, 'fixtures', 'messages'))
 const psyslogPath = path.join(path.resolve(__dirname, '..', 'psyslog'))
@@ -19,7 +18,7 @@ function configPath () {
   return path.join.apply(null, [__dirname, 'fixtures', 'configs'].concat(Array.from(arguments)))
 }
 
-test('skips non-json input', (t) => {
+test('skips non-json input', (t, done) => {
   t.plan(1)
   const psyslog = spawn('node', [psyslogPath])
 
@@ -28,161 +27,173 @@ test('skips non-json input', (t) => {
   })
 
   psyslog.on('close', (code) => {
-    t.equal(code, 0)
+    t.assert.equal(code, 0)
+    done()
   })
 
   psyslog.stdin.end('this is not json\n')
 })
 
-test('hello world', (t) => {
+test('hello world', (t, done) => {
   t.plan(1)
   const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - '
   const psyslog = spawn('node', [psyslogPath])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, header + messages.helloWorld)
+    t.assert.equal(msg, header + messages.helloWorld)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('formats to message only', (t) => {
+test('formats to message only', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'messageOnly.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('sets application name', (t) => {
+test('sets application name', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 test 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'appname.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('sets facility', (t) => {
+test('sets facility', (t, done) => {
   t.plan(1)
   const expected = '<6>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'facility.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('sets timezone', (t) => {
+test('sets timezone', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T12:44:58-04:00 MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'tz.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('prepends `@cee `', (t) => {
+test('prepends `@cee `', (t, done) => {
   t.plan(1)
   const header = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - @cee: '
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'cee.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, header + messages.helloWorld)
+    t.assert.equal(msg, header + messages.helloWorld)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('does not prepend `@cee ` for non-json messages', (t) => {
+test('does not prepend `@cee ` for non-json messages', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'ceeMessageOnly.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('appends newline', (t) => {
+test('appends newline', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - ' + messages.helloWorld + '\n'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'newline.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('write synchronously', (t) => {
+test('write synchronously', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - - ' + messages.helloWorld
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'sync.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('uses structured data', (t) => {
+test('uses structured data', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 - 94473 - [a@b x="y"] ' + messages.helloWorld
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'structuredData.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
 })
 
-test('sets customLevels', (t) => {
+test('sets customLevels', (t, done) => {
   t.plan(1)
   const expected = '<134>1 2016-04-01T16:44:58Z MacBook-Pro-3 test 94473 - - hello world'
   const psyslog = spawn('node', [psyslogPath, '-c', configPath('5424', 'custom-level.json')])
 
   psyslog.stdout.on('data', (data) => {
     const msg = data.toString()
-    t.equal(msg, expected)
+    t.assert.equal(msg, expected)
     psyslog.kill()
+    done()
   })
 
   psyslog.stdin.write(messages.helloWorld + '\n')
@@ -195,8 +206,8 @@ function getConfigPath () {
 
 const pinoSyslog = join(__dirname, '..', 'lib', 'transport.js')
 
-test('syslog pino transport test rfc5424', async t => {
-  const destination = join(os.tmpdir(), 'pino-transport-test.log')
+test('syslog pino transport test rfc5424', async (t) => {
+  const destination = join(os.tmpdir(), 'pino-transport-test.5424.log')
 
   const fd = fs.openSync(destination, 'w+')
   const sysLogOptions = {
@@ -211,9 +222,7 @@ test('syslog pino transport test rfc5424', async t => {
     options: sysLogOptions
   })
   const log = pino(transport)
-  t.pass('built pino')
   await once(transport, 'ready')
-  t.pass('transport ready ' + destination)
 
   log.info(JSON.parse(messages.leadingDay))
   log.debug(JSON.parse(messages.helloWorld)) // it is skipped
@@ -222,6 +231,6 @@ test('syslog pino transport test rfc5424', async t => {
   await timeout(1000)
 
   const data = fs.readFileSync(destination, 'utf8').trim().split('\n')
-  t.ok(data[0].startsWith('<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line leadingDay')
-  t.ok(data[1].startsWith('<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '), 'first line trailingDay')
+  t.assert.equal(data[0].startsWith('<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - '), true, 'first line leadingDay')
+  t.assert.equal(data[1].startsWith('<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '), true, 'first line trailingDay')
 })

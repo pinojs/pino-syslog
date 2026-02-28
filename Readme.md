@@ -1,13 +1,13 @@
 # pino-syslog
 
-**Lead maintainer:** [jsumners](https://github.com/jsumners)
+*pino-syslog* is a "transport" for the [pino][pino] logger. *pino-syslog*
+receives *pino* logs from `stdin` and transforms them into [RFC3164][rfc3164] or
+[RFC5424][rfc5424] (syslog) formatted messages which are written to `stdout`.
+The default output format is RFC5424.
 
-*pino-syslog* is a so called "transport" for the [pino][pino] logger. *pino-syslog* receives *pino* logs from `stdin`
-and transforms them into [RFC3164][rfc3164] or [RFC5424][rfc5424] (syslog) formatted messages which are written to
-`stdout`. The default output format is RFC5424.
-
-This transport **does not** send messages to a remote, or even local, syslog compatible server. It merely reformats the
-logs into syslog compatible strings. To send logs to a syslog server, use the [pino-socket][pino-socket] transport.
+This transport **does not** send messages to a remote, or even local, syslog
+compatible server. It merely reformats the logs into syslog compatible strings.
+To send logs to a syslog server, use the [pino-socket][pino-socket] transport.
 For example:
 
 ```bash
@@ -22,24 +22,30 @@ $ node your-app.js | pino-syslog | pino-socket -a syslog.example.com
 ## RFC3164
 
 This RFC mandates that the maximum number of bytes that a syslog message may be
-is `1024`. Thus, *pino-syslog* will do one of two things when this limit is exceeded:
+is `1024`. Thus, *pino-syslog* will do one of two things when this limit is
+exceeded:
 
-1. Output a JSON error log, with syslog header, that includes the original log's `time` and `level` properties, a
-  `originalSize` property set to the number of bytes the original log message consumed, and a `msg` property set to
-  "message exceeded syslog 1024 byte limit".
-2. Truncate the message to fit within the 1024 byte limit when the `messageOnly` configuration option is set to `true`.
+1. Output a JSON error log, with syslog header, that includes the original log's
+   `time` and `level` properties, a `originalSize` property set to the number of
+   bytes the original log message consumed, and a `msg` property set to "message
+   exceeded syslog 1024 byte limit". 2. Truncate the message to fit within the
+   1024 byte limit when the `messageOnly` configuration option is set to `true`.
 
-This means you *can* lose data if your log messages are too large. If that is to be the case, you should investigate
-the `includeProperties` option to reduce your log size. But, really, you should investigate what it is you are logging.
+This means you *can* lose data if your log messages are too large. If that is to
+be the case, you should investigate the `includeProperties` option to reduce
+your log size. But, really, you should investigate what it is you are logging.
 
 ## RFC5424
 
-This RFC does not limit the message size except to say that the ***receiver*** may impose a maximum. Thus, *pino-syslog*
-does not impose a length limit when conforming to this RFC. There are a couple of things to note, though:
+This RFC does not limit the message size except to say that the ***receiver***
+may impose a maximum. Thus, *pino-syslog* does not impose a length limit when
+conforming to this RFC. There are a couple of things to note, though:
 
-1. We do not currently support the structured data portion of the log header. This section of each log is always `-`.
-2. If the data to be logged includes `req.id` then it will be used as the message id portion of the log. For example,
-  the data `{req: {id: '1234'}}` would have '1234' as the message id in the resulting formatted log.
+1. We do not currently support the structured data portion of the log header.
+   This section of each log is always `-`. 2. If the data to be logged includes
+   `req.id` then it will be used as the message id portion of the log. For
+   example, the data `{req: {id: '1234'}}` would have '1234' as the message id
+   in the resulting formatted log.
 
 These caveats may be configurable in a later version.
 
@@ -89,15 +95,20 @@ const transport = pino.transport({
 pino(transport)
 ```
 
-The options object's properties are [described below](#configuration).
-There is some extra properties:
+The options object's properties are [described below](#configuration). There is
+some extra properties:
 
-+ `enablePipelining`: it must be set to `false` to disable the pino transport pipeline.
-+ `destination`: it must be an integer which is used to specify the destination of the log messages. `1` is stdout, `2` is stderr and others numbers must be a file descriptor. This option is used only when the pipelining is disabled.
++ `enablePipelining`: it must be set to `false` to disable the pino transport
+pipeline. + `destination`: it must be an integer which is used to specify the
+destination of the log messages. `1` is stdout, `2` is stderr and others numbers
+must be a file descriptor. This option is used only when the pipelining is
+disabled.
 
 ### Pipelining
 
-This feature is enabled by default and let you to submit the `pino-syslog` output to another destination at your choice, such as a `socket` using the `pino-socket` module:
+This feature is enabled by default and let you to submit the `pino-syslog`
+output to another destination at your choice, such as a `socket` using the
+`pino-socket` module:
 
 ```js
 const transport = pino.transport({
@@ -138,7 +149,9 @@ $ npm install --production -g pino-syslog
 
 ## Configuration
 
-*pino-syslog* supports configuration using option flags and/or via a JSON file. The option flags take precedence over the JSON configuration. The default options are:
+*pino-syslog* supports configuration using option flags and/or via a JSON file.
+The option flags take precedence over the JSON configuration. The default
+options are:
 
 ```json
 {
@@ -180,10 +193,10 @@ This also shows the full structure of a configuration file, which can be loaded 
 
 ### Custom levels
 
-Custom [Pino levels](https://github.com/pinojs/pino/blob/HEAD/docs/api.md#opt-customlevels) are supported.
-They must be established through a mapping defined under the `customLevels`
-configuration key. `customLevels` is a hash of hashes. Each key under
-`customLevels` is a custom level name with a value that is a hash with
+Custom [Pino levels](https://github.com/pinojs/pino/blob/HEAD/docs/api.md#opt-customlevels)
+are supported. They must be established through a mapping defined under the
+`customLevels` configuration key. `customLevels` is a hash of hashes. Each key
+under `customLevels` is a custom level name with a value that is a hash with
 keys `level` and `syslogSeverity`. The `level` key maps to the log level number,
 and the `syslogSeverity` key to the name of a spec compliant syslog level:
 "emergency", "alert", "critical", "error", "warning", "notice", "info", or

@@ -1,9 +1,9 @@
 'use strict'
 
-const os = require('os')
-const { join } = require('path')
-const { once } = require('events')
-const { test } = require('tap')
+const test = require('node:test')
+const os = require('node:os')
+const { join } = require('node:path')
+const { once } = require('node:events')
 const { createTcpListener } = require('pino-socket/test/utils')
 const pino = require('pino')
 
@@ -16,60 +16,67 @@ function getConfigPath () {
   return require(cpath)
 }
 
-test('pino pipeline', t => {
+test('pino pipeline', (t, done) => {
   t.plan(4)
-  const destination = join(os.tmpdir(), 'pino-transport-test.log')
+  const destination = join(os.tmpdir(), 'pino-transport-test.pipeline.log')
 
   const expected = [
     '<134>1 2018-02-03T01:20:00Z MacBook-Pro-3 - 94473 - - ',
     '<134>1 2018-02-10T01:20:00Z MacBook-Pro-3 - 94473 - - '
   ]
 
+  let count = 0
   createTcpListener(msg => {
+    count++
+
     msg.split('\n')
       .filter(line => line) // skip empty lines
       .forEach(line => {
-        t.ok(line.startsWith(expected.shift()))
+        t.assert.ok(line.startsWith(expected.shift()))
       })
-  }).then((serverSocket) => {
-    t.teardown(() => {
-      serverSocket.close()
-      serverSocket.unref()
-      transport.end()
-    })
 
-    const address = serverSocket.address().address
-    const port = serverSocket.address().port
-
-    const transport = pino.transport({
-      pipeline: [
-        {
-          target: pinoSyslog,
-          level: 'info',
-          options: {
-            ...getConfigPath('5424', 'newline.json')
-          }
-        },
-        {
-          target: 'pino-socket',
-          options: {
-            mode: 'tcp',
-            address,
-            port
-          }
-        }
-      ]
-    })
-    const log = pino(transport)
-    t.pass('built pino')
-    return once(transport, 'ready').then(() => log)
-  }).then(log => {
-    t.pass('transport ready ' + destination)
-
-    log.info(JSON.parse(messages.leadingDay))
-    log.debug(JSON.parse(messages.helloWorld)) // it is skipped
-    log.info(JSON.parse(messages.trailingDay))
+    if (count >= 2) done()
   })
+    .then((serverSocket) => {
+      t.after(() => {
+        serverSocket.close()
+        serverSocket.unref()
+        transport.end()
+      })
+
+      const address = serverSocket.address().address
+      const port = serverSocket.address().port
+
+      const transport = pino.transport({
+        pipeline: [
+          {
+            target: pinoSyslog,
+            level: 'info',
+            options: {
+              ...getConfigPath('5424', 'newline.json')
+            }
+          },
+          {
+            target: 'pino-socket',
+            options: {
+              mode: 'tcp',
+              address,
+              port
+            }
+          }
+        ]
+      })
+      const log = pino(transport)
+      t.assert.ok('built pino')
+      return once(transport, 'ready').then(() => log)
+    })
+    .then(log => {
+      t.assert.ok('transport ready ' + destination)
+
+      log.info(JSON.parse(messages.leadingDay))
+      log.debug(JSON.parse(messages.helloWorld)) // it is skipped
+      log.info(JSON.parse(messages.trailingDay))
+    })
     .catch((err) => {
       t.fail(err)
     })
