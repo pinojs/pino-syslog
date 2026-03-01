@@ -18,7 +18,9 @@ const longOpts = {
   newline: Boolean,
   structuredData: String,
   config: String,
-  sync: Boolean
+  sync: Boolean,
+  filterProperties: String,
+  levelAsText: Boolean
 }
 
 const shortOpts = {
@@ -30,7 +32,8 @@ const shortOpts = {
   n: '--newline',
   s: '--structuredData',
   c: '--config',
-  sy: '--sync'
+  sy: '--sync',
+  l: '--levelAsText'
 }
 
 const args = nopt(longOpts, shortOpts)

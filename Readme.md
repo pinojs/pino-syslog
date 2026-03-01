@@ -164,7 +164,9 @@ options are:
   "tz": "UTC",
   "newline": false,
   "structuredData": "-",
-  "sync": false
+  "sync": false,
+  "filterProperties": [],
+  "levelAsText": false,
 }
 ```
 
@@ -186,6 +188,9 @@ This also shows the full structure of a configuration file, which can be loaded 
 + `--newline` (`-n`) (boolean): terminate with a newline
 + `--structuredData` (`-s`) (string): [structured data](https://tools.ietf.org/html/rfc5424#section-6.3) to send with an RFC5424 message.
 + `--sync` (`-sy`) (boolean): perform writes synchronously
++ `--filterProperties` (array<string>): a list of property names from the original *pino* log to exclude from the formatted
+  message. This is only applicable if `messageOnly` is `false`.
++ `--levelAsText` (`-l`) (boolean): if `true`, the `level` property of the *pino* log is sent as a string instead of a number.
 
 [facility]: https://tools.ietf.org/html/rfc3164#section-4.1.1
 [tzstring]: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
